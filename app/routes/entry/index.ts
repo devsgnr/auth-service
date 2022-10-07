@@ -6,6 +6,6 @@ const EntryRouter: Router = express.Router();
 
 /* Entry Routers */
 /* Route to signal server running */
-EntryRouter.get("/:id", EntryController);
+EntryRouter.get("/", EntryController);
 
 export default EntryRouter;

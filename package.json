@@ -7,7 +7,7 @@
   "author": "Emmanuel Watila",
   "license": "MIT",
   "scripts": {
-    "build": "yarn tsc",
+    "build": "rm -fr dist && yarn tsc",
     "start": "node dist/index.js",
     "watch": "yarn tsc --watch",
     "dev": "nodemon -q ./dist/index.js"
