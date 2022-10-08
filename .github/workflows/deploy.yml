@@ -1,0 +1,55 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Build and Deploy to AWS ECR
+
+on:
+  push:
+    branches: [ "main" ]
+
+  
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    name: Build Image
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        
+      - name: Build Authentication Service
+        run: yarn install && yarn build
+        
+      - name: Create .env file from Action Secrets
+        uses: SpicyPizza/create-envfile@v1.3
+        with:
+          envkey_NODE_ENV: PROD
+          envkey_PROD_PORT: 8080
+          envkey_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          envkey_PASSWORD_HASH: ${{ secrets.PASSWORD_HASH }}
+          envkey_JWT_TOKEN: ${{ secrets.JWT_TOKEN }}
+        
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+          
+      - name: Login to AWS ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+        
+      - name: Build, tag and push image to AWS ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: worktop-auth
+          IMAGE_TAG: ${{ secrets.SERVICE_VERSION }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
