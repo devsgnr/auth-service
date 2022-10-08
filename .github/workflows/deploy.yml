@@ -45,6 +45,9 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
+      - name: Create Image Definitions File
+        run: touch imagedefinitions.json && echo "[{ "name":"worktop-auth", imageUri:"${{ steps.login-ecr.outputs.registry }}/worktop-auth:v1" }]" >> imagedefinitions.json
+
       - name: Build, tag and push image to AWS ECR
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
