@@ -1,9 +1,11 @@
-export interface IResponse<T> {
+export interface WTResponse<T> {
   data?: T | null;
   message: string;
   success: boolean;
 }
 
-export interface IAuthResponse<T> extends IResponse<T> {
+// WTAtuhResponse extends WTResponse default property
+// and adds `token`
+export interface WTAuthResponse<T> extends WTResponse<T> {
   token: string;
 }

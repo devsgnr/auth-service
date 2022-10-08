@@ -1,17 +1,13 @@
 import { NextFunction, Request, Response } from "express";
-import { IUser } from "../../types/auth";
-import { IResponse } from "../../types/response";
+import { WTUser } from "../../types/auth";
+import { WTResponse } from "../../types/response";
 import UserModel from "../schema/auth";
 
-type CustomRequest = Request<{}, {}, IUser>;
-type CustomResponse = Response<IResponse<null>>;
+type Incoming = Request<{}, {}, WTUser>;
+type Outgoing = Response<WTResponse<null>>;
 type Next = NextFunction;
 
-const checkUserNotExisting = async (
-  req: CustomRequest,
-  res: CustomResponse,
-  next: Next
-) => {
+const UserNotFound = async (req: Incoming, res: Outgoing, next: Next) => {
   const { email } = req.body;
   const user = await UserModel.findOne({ email });
 
@@ -24,4 +20,4 @@ const checkUserNotExisting = async (
   }
 };
 
-export default checkUserNotExisting;
+export default UserNotFound;

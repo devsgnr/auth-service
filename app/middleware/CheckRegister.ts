@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from "express";
-import { IUser } from "../../types/auth";
-import { IResponse } from "../../types/response";
+import { WTUser } from "../../types/auth";
+import { WTResponse } from "../../types/response";
 
-type CustomRequest = Request<{}, {}, IUser>;
-type CustomResponse = Response<IResponse<null>>;
+type Incoming = Request<{}, {}, WTUser>;
+type Outgoing = Response<WTResponse<null>>;
 type Next = NextFunction;
 
-const CheckRegister = (req: CustomRequest, res: CustomResponse, next: Next) => {
+const CheckRegister = (req: Incoming, res: Outgoing, next: Next) => {
   const { email, password, full_name } = req.body;
   if (!(email && password && full_name)) {
     res

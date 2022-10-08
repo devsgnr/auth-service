@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from "express";
-import { ILogin } from "../../types/auth";
-import { IResponse } from "../../types/response";
+import { WTLogin } from "../../types/auth";
+import { WTResponse } from "../../types/response";
 
-type CustomRequest = Request<{}, {}, ILogin>;
-type CustomResponse = Response<IResponse<null>>;
+type Incoming = Request<{}, {}, WTLogin>;
+type Outgoing = Response<WTResponse<null>>;
 type Next = NextFunction;
 
-const CheckLogin = (req: CustomRequest, res: CustomResponse, next: Next) => {
+const CheckLogin = (req: Incoming, res: Outgoing, next: Next) => {
   const { email, password } = req.body;
   if (!(email && password)) {
     res

@@ -1,4 +1,4 @@
-export interface IUser {
+export interface WTUser {
   _id: string;
   email: string;
   password: string;
@@ -8,7 +8,7 @@ export interface IUser {
   token: string;
 }
 
-export interface ILogin {
+export interface WTLogin {
   email: string;
   password: string;
 }

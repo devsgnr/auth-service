@@ -1,18 +1,15 @@
 import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { ILogin, IUser } from "../../../types/auth";
-import { IAuthResponse } from "../../../types/response";
+import { WTLogin, WTUser } from "../../../types/auth";
+import { WTAuthResponse } from "../../../types/response";
 import env from "../../../utils/env";
 import UserModel from "../../schema/auth";
 
-type CustomRequest<T> = Request<{}, {}, T>;
-type CustomResponse<T> = Response<IAuthResponse<T>>;
+type Incoming<T> = Request<{}, {}, T>;
+type Outgoing<T> = Response<WTAuthResponse<T>>;
 
-const CreateUser = async (
-  req: CustomRequest<IUser>,
-  res: CustomResponse<IUser>
-) => {
+const CreateUser = async (req: Incoming<WTUser>, res: Outgoing<WTUser>) => {
   const { email, password } = req.body;
   try {
     const hashedPass = await bcrypt.hash(password, env.auth.passwordHash);
@@ -41,14 +38,11 @@ const CreateUser = async (
   }
 };
 
-const LoginUser = async (
-  req: CustomRequest<ILogin>,
-  res: CustomResponse<IUser>
-) => {
+const LoginUser = async (req: Incoming<WTLogin>, res: Outgoing<WTUser>) => {
   const { email } = req.body;
   let token;
   await UserModel.findOne({ email })
-    .then(async (user: IUser | null) => {
+    .then(async (user: WTUser | null) => {
       if (user) {
         token = jwt.sign({ user: user._id, email }, env.auth.jwtToken, {
           expiresIn: "23h",

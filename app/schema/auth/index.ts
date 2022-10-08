@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import { IUser } from "../../../types/auth";
+import { WTUser } from "../../../types/auth";
 
-const UserSchema = new mongoose.Schema<IUser>({
+const UserSchema = new mongoose.Schema<WTUser>({
   full_name: { type: String, required: true },
   email: { type: String, unique: true, required: true },
   password: { type: String, select: false },
