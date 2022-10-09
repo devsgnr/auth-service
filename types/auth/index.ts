@@ -12,3 +12,8 @@ export interface WTLogin {
   email: string;
   password: string;
 }
+
+export interface WTForgotPassword {
+  _id: string;
+  email: string;
+}
