@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 
-/* Setup .env with dotenv.config() */
+/* Expose values from .env file with dotenv.config() */
 dotenv.config();
 
 const env = {

@@ -40,7 +40,6 @@ app.use(cors());
 app.use(helmet());
 
 /* Route Middleware */
-/* Index Routes */
 app.use(Routers);
 
 /* Start Server */
